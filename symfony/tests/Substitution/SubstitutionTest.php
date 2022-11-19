@@ -49,19 +49,22 @@ class SubstitutionTest extends KernelTestCase
         self::assertCount(2, $user->getSubstitutions());
     }
 
-    public function testEmptySubstitutionParam(): void
+
+    /**
+     * @dataProvider provideEmptyParams
+     */
+    public function testEmptySubstitutionParam(string $eanCodeToReplace, string $eanCodeOfSubstitute): void
     {
         $user = new User();
 
         self::expectExceptionMessage("Please verify that your codes are not empty.");
-        $this->substitutionService->addSubstitution($user, '', '11111');
-
-        self::expectExceptionMessage("Please verify that your codes are not empty.");
-        $this->substitutionService->addSubstitution($user, '11111', '');
-
-        self::expectExceptionMessage("Please verify that your codes are not empty.");
-        $this->substitutionService->addSubstitution($user, '', '');
+        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
     }
 
-
+    private function provideEmptyParams()
+    {
+        yield ['', '111111'];
+        yield ['111111', ''];
+        yield ['', ''];
+    }
 }
