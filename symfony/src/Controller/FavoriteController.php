@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FavoriteProduct;
 use App\Entity\User;
 use App\Service\FavoriteProductManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,7 @@ class FavoriteController extends AbstractController
     /**
      * @Route(name="save-favorite", path="/save/{code}", methods={"POST"})
      */
-    public function registerUser(EntityManagerInterface $entityManager, FavoriteProductManager $favoriteProductManager, string $code): JsonResponse
+    public function saveFavorite(EntityManagerInterface $entityManager, FavoriteProductManager $favoriteProductManager, string $code): JsonResponse
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
@@ -29,5 +30,21 @@ class FavoriteController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse('Product successfully saved as favorite.', Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(name="delete-favorite", path="/delete/{code}", methods={"DELETE"})
+     */
+    public function deleteFavorite(EntityManagerInterface $entityManager, FavoriteProductManager $favoriteProductManager, string $code): JsonResponse
+    {
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new \Exception("User not found. ");
+        }
+
+        $favoriteProductManager->removeFavoriteProduct($currentUser, $code);
+        $entityManager->flush();
+
+        return new JsonResponse('Product successfully removed of favorites.', Response::HTTP_OK);
     }
 }

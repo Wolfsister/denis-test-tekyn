@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\FavoriteProduct;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,14 @@ class FavoriteProductRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FavoriteProduct[] Returns an array of FavoriteProduct objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?FavoriteProduct
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findExistingFavoriteProductOfUser(User $user, string $code): ?FavoriteProduct
+    {
+        return $this->createQueryBuilder('favoriteProduct')
+            ->join('favoriteProduct.User', 'user')
+            ->andWhere('user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('favoriteProduct.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()->getOneOrNullResult();
+    }
 }
