@@ -32,9 +32,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: FavoriteProduct::class, mappedBy: 'User', cascade: ["persist"])]
     private Collection $favoriteProducts;
 
+    #[ORM\ManyToMany(targetEntity: Substitution::class, mappedBy: 'user')]
+    private Collection $substitutions;
+
     public function __construct()
     {
         $this->favoriteProducts = new ArrayCollection();
+        $this->substitutions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +149,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->favoriteProducts->removeElement($favoriteProduct)) {
             $favoriteProduct->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Substitution>
+     */
+    public function getSubstitutions(): Collection
+    {
+        return $this->substitutions;
+    }
+
+    public function addSubstitution(Substitution $substitution): self
+    {
+        if (!$this->substitutions->contains($substitution)) {
+            $this->substitutions->add($substitution);
+            $substitution->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubstitution(Substitution $substitution): self
+    {
+        if ($this->substitutions->removeElement($substitution)) {
+            $substitution->removeUser($this);
         }
 
         return $this;

@@ -4,7 +4,7 @@ namespace App\Service;
 use App\Entity\FavoriteProduct;
 use App\Entity\User;
 
-class FavoriteProductService
+class FavoriteProductManager
 {
 
     public function addFavoriteProduct(User $user, string $code): void

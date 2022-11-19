@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\FavoriteProductService;
+use App\Service\FavoriteProductManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,14 +18,14 @@ class FavoriteController extends AbstractController
     /**
      * @Route(name="save-favorite", path="/save/{code}", methods={"POST"})
      */
-    public function registerUser(EntityManagerInterface $entityManager, FavoriteProductService $favoriteProductService, string $code): JsonResponse
+    public function registerUser(EntityManagerInterface $entityManager, FavoriteProductManager $favoriteProductManager, string $code): JsonResponse
     {
         $currentUser = $this->getUser();
         if (!$currentUser) {
             throw new \Exception("User not found. ");
         }
 
-        $favoriteProductService->addFavoriteProduct($currentUser, $code);
+        $favoriteProductManager->addFavoriteProduct($currentUser, $code);
         $entityManager->flush();
 
         return new JsonResponse('Product successfully saved as favorite.', Response::HTTP_OK);

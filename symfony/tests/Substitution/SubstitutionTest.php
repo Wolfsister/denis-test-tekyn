@@ -1,16 +1,16 @@
 <?php
 
 use App\Entity\User;
-use App\Service\SubstitutionService;
+use App\Service\SubstitutionManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SubstitutionTest extends KernelTestCase
 {
-    private SubstitutionService $substitutionService;
+    private SubstitutionManager $substitutionService;
 
     protected function setUp(): void
     {
-        $this->substitutionService = static::getContainer()->get(SubstitutionService::class);
+        $this->substitutionService = static::getContainer()->get(SubstitutionManager::class);
     }
 
     public function testCorrectSubstitutionAddedToUser(): void
@@ -21,8 +21,8 @@ class SubstitutionTest extends KernelTestCase
         $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
 
         self::assertCount(1, $user->getSubstitutions());
-        self::assertSame($user->getSubstitutions()->first()->getCode(), $eanCodeOfSubstitute);
-        self::assertSame($user->getSubstitutions()->first()->getCodeToReplace(), $eanCodeToReplace);
+        self::assertSame($user->getSubstitutions()->first()->getEanCodeOfSubstitute(), $eanCodeOfSubstitute);
+        self::assertSame($user->getSubstitutions()->first()->getEanCodeToReplace(), $eanCodeToReplace);
     }
 
     public function testSubstitutionSameAsReplaced(): void

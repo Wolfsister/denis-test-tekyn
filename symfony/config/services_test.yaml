@@ -1,5 +1,9 @@
 services:
     _defaults:
         public: true
-    App\Service\FavoriteProductService:
+
+    App\Service\SubstitutionManager:
+        public: true
+
+    App\Service\FavoriteProductManager:
         public: true
