@@ -9,6 +9,9 @@ class SubstitutionManager
 
     public function addSubstitution(User $user, string $eanCodeToReplace, string $eanCodeOfSubstitute): void
     {
+        if ($eanCodeToReplace === $eanCodeOfSubstitute) {
+            throw new \InvalidArgumentException("Please choose two different codes.");
+        }
         $substitution = (new Substitution())->setEanCodeToReplace($eanCodeToReplace)->setEanCodeOfSubstitute($eanCodeOfSubstitute);
         $user->addSubstitution($substitution);
     }
