@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: FavoriteProduct::class, mappedBy: 'User', cascade: ["persist"])]
     private Collection $favoriteProducts;
 
-    #[ORM\ManyToMany(targetEntity: Substitution::class, mappedBy: 'user')]
+    #[ORM\ManyToMany(targetEntity: Substitution::class, mappedBy: 'user', cascade: ["persist"])]
     private Collection $substitutions;
 
     public function __construct()
