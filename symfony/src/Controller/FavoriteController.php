@@ -47,4 +47,21 @@ class FavoriteController extends AbstractController
 
         return new JsonResponse('Product successfully removed of favorites.', Response::HTTP_OK);
     }
+
+
+    /**
+     * @Route(name="clear-all-favorites", path="/clear", methods={"DELETE"})
+     */
+    public function clearAllFavorites(EntityManagerInterface $entityManager, FavoriteProductManager $favoriteProductManager): JsonResponse
+    {
+        $currentUser = $this->getUser();
+        if (!$currentUser) {
+            throw new \Exception("User not found. ");
+        }
+
+        $favoriteProductManager->clearAllFavoriteProducts($currentUser);
+        $entityManager->flush();
+
+        return new JsonResponse('All favorite products successfully cleared.', Response::HTTP_OK);
+    }
 }

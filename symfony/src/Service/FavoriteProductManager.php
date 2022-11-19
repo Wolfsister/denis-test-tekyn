@@ -30,4 +30,11 @@ class FavoriteProductManager
         $user->removeFavoriteProduct($favoriteProductToRemove);
     }
 
+    public function clearAllFavoriteProducts(User $user): void
+    {
+        $allFavoriteProducts = $user->getFavoriteProducts();
+        foreach ($allFavoriteProducts as $favoriteProduct) {
+            $user->removeFavoriteProduct($favoriteProduct);
+        }
+    }
 }
