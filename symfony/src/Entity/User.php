@@ -131,7 +131,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
     {
-        if (!$this->favoriteProducts->contains($favoriteProduct)) {
+        if (!$this->favoriteProducts->exists(function($key, $existingProduct) use ($favoriteProduct) {
+            return $favoriteProduct->getCode() === $existingProduct->getCode();
+        })) {
             $this->favoriteProducts->add($favoriteProduct);
             $favoriteProduct->addUser($this);
         }
