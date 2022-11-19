@@ -13,9 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController {
     /**
      * @Route(name="create-user", path="/api/create-user", methods={"POST"})
-     * @
-     * @param UserPasswordHasherInterface $passwordHasher
-     * @return void
      */
     public function registerUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
