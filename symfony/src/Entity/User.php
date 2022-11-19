@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToMany(targetEntity: FavoriteProduct::class, mappedBy: 'User')]
+    #[ORM\ManyToMany(targetEntity: FavoriteProduct::class, mappedBy: 'User', cascade: ["persist"])]
     private Collection $favoriteProducts;
 
     public function __construct()

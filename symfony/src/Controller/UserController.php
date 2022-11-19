@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,8 +12,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController {
+
     /**
-     * @Route(name="create-user", path="/api/create-user", methods={"POST"})
+     * @Route(name="create-user", path="/create-user", methods={"POST"})
      */
     public function registerUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -28,7 +30,11 @@ class UserController extends AbstractController {
         $user->setPassword($hashedPassword);
 
         $entityManager->persist($user);
-        $entityManager->flush();
+        try {
+            $entityManager->flush();
+        } catch(UniqueConstraintViolationException $uniqueConstraintViolationException) {
+            return new JsonResponse('Try another user, this one seems to be already created.', Response::HTTP_BAD_REQUEST);
+        }
 
         return new JsonResponse('User saved', Response::HTTP_OK);
     }
