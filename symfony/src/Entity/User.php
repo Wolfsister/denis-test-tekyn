@@ -35,10 +35,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Substitution::class, mappedBy: 'user', cascade: ["persist"])]
     private Collection $substitutions;
 
+    #[ORM\ManyToMany(targetEntity: ExcludedProduct::class, mappedBy: 'user', cascade: ["persist"])]
+    private Collection $excludedProducts;
+
     public function __construct()
     {
         $this->favoriteProducts = new ArrayCollection();
         $this->substitutions = new ArrayCollection();
+        $this->excludedProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +182,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->substitutions->removeElement($substitution)) {
             $substitution->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExcludedProduct>
+     */
+    public function getExcludedProducts(): Collection
+    {
+        return $this->excludedProducts;
+    }
+
+    public function addExcludedProduct(ExcludedProduct $excludedProduct): self
+    {
+        if (!$this->excludedProducts->exists(function($key, $existingExclusion) use ($excludedProduct) {
+            return $existingExclusion->getCode() === $excludedProduct->getCode();
+        })) {
+            $this->excludedProducts->add($excludedProduct);
+            $excludedProduct->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExcludedProduct(ExcludedProduct $excludedProduct): self
+    {
+        if ($this->excludedProducts->removeElement($excludedProduct)) {
+            $excludedProduct->removeUser($this);
         }
 
         return $this;
