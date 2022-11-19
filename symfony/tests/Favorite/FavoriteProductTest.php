@@ -45,7 +45,7 @@ class FavoriteProductTest extends KernelTestCase
     public function testAddEmptyEan(): void
     {
         $user = new User();
-        $eanCode = null;
+        $eanCode = '';
         self::expectExceptionMessage('An empty EAN was given.');
         $this->favoriteProductService->addFavoriteProduct($user, $eanCode);
     }
