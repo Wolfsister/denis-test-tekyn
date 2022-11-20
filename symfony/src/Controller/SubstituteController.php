@@ -26,7 +26,6 @@ class SubstituteController extends AbstractController
         if (!$eanCodeOfSubstitute) {
             throw new InvalidArgumentException("Please indicate an ean code of a substitute with the param name 'eanCodeOfSubstitute'.");
         }
-        // TODO: ask OpenFoodFact for our product, get the tags to try to get an equivalent with a better nutri-score ?
 
         $currentUser = $this->getUser();
         if (!$currentUser) {

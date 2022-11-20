@@ -7,64 +7,44 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class SubstitutionTest extends KernelTestCase
 {
     private SubstitutionManager $substitutionService;
+    private array $similarProduct;
 
     protected function setUp(): void
     {
         $this->substitutionService = static::getContainer()->get(SubstitutionManager::class);
+
+        $this->similarProduct = [
+            "brands" => "Cristaline",
+            "categories_tags_fr" => [
+                0 => "Boissons",
+                1 => "Eaux",
+                2 => "Eaux de sources",
+            ],
+            "code" => "3274080005003",
+            "nutriscore_score" => 10,
+            "product_name" => "Eau de source",
+        ];
     }
 
     public function testCorrectSubstitutionAddedToUser(): void
     {
         $user = new User();
         $eanCodeToReplace = '8024884500403';
-        $eanCodeOfSubstitute = '11111111';
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
+        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $this->similarProduct);
 
         self::assertCount(1, $user->getSubstitutions());
-        self::assertSame($user->getSubstitutions()->first()->getEanCodeOfSubstitute(), $eanCodeOfSubstitute);
+        self::assertSame($user->getSubstitutions()->first()->getEanCodeOfSubstitute(), $this->similarProduct['code']);
         self::assertSame($user->getSubstitutions()->first()->getEanCodeToReplace(), $eanCodeToReplace);
-    }
-
-    public function testSubstitutionSameAsReplaced(): void
-    {
-        $user = new User();
-        $eanCodeToReplace = $eanCodeOfSubstitute = '8024884500403';
-        self::expectExceptionMessage("Please choose two different codes.");
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
     }
 
     public function testSubstitutionAlreadySaved(): void
     {
         $user = new User();
         $eanCodeToReplace = '8024884500403';
-        $eanCodeOfSubstitute = '11111111';
-        $eanCodeOfSecondSubstitute = '2222222';
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
+        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $this->similarProduct);
         self::assertCount(1, $user->getSubstitutions());
 
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
+        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $this->similarProduct);
         self::assertCount(1, $user->getSubstitutions());
-
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSecondSubstitute);
-        self::assertCount(2, $user->getSubstitutions());
-    }
-
-
-    /**
-     * @dataProvider provideEmptyParams
-     */
-    public function testEmptySubstitutionParam(string $eanCodeToReplace, string $eanCodeOfSubstitute): void
-    {
-        $user = new User();
-
-        self::expectExceptionMessage("Please verify that your codes are not empty.");
-        $this->substitutionService->addSubstitution($user, $eanCodeToReplace, $eanCodeOfSubstitute);
-    }
-
-    private function provideEmptyParams()
-    {
-        yield ['', '111111'];
-        yield ['111111', ''];
-        yield ['', ''];
     }
 }

@@ -1,9 +1,8 @@
 services:
-    _defaults:
-        public: true
-
     App\Service\SubstitutionManager:
         public: true
+        autowire: true
 
     App\Service\FavoriteProductManager:
         public: true
+        autowire: true

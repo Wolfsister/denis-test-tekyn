@@ -169,7 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addSubstitution(Substitution $substitution): self
     {
         if (!$this->substitutions->exists(function($key, $existingSubstitution) use ($substitution) {
-            return $existingSubstitution->getEanCodeToReplace() === $substitution->getEanCodeToReplace() && $existingSubstitution->getEanCodeOfSubstitute() === $substitution->getEanCodeOfSubstitute();
+            return $existingSubstitution->getEanCodeToReplace() === $substitution->getEanCodeToReplace();
         })) {
             $this->substitutions->add($substitution);
             $substitution->addUser($this);
