@@ -33,7 +33,8 @@ class SubstituteController extends AbstractController
             throw new \Exception("User not found.");
         }
 
-        $substitutionManager->addSubstitution($currentUser, $eanCodeToReplace, $eanCodeOfSubstitute);
+        $similarProduct = $substitutionManager->searchSimilarProduct($eanCodeToReplace);
+        $substitutionManager->addSubstitution($currentUser, $eanCodeToReplace, $similarProduct);
         $entityManager->flush();
 
         return new JsonResponse('Substitution successfully saved.', Response::HTTP_OK);

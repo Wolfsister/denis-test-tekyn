@@ -6,17 +6,29 @@ use App\Entity\User;
 
 class SubstitutionManager
 {
-
-    public function addSubstitution(User $user, string $eanCodeToReplace, string $eanCodeOfSubstitute): void
+    public function __construct(private OpenFoodFactsManager $openFoodFactsManager)
     {
-        if (empty($eanCodeToReplace) || empty($eanCodeOfSubstitute)) {
-            throw new \InvalidArgumentException("Please verify that your codes are not empty.");
-        }
+    }
 
-        if ($eanCodeToReplace === $eanCodeOfSubstitute) {
-            throw new \InvalidArgumentException("Please choose two different codes.");
-        }
-        $substitution = (new Substitution())->setEanCodeToReplace($eanCodeToReplace)->setEanCodeOfSubstitute($eanCodeOfSubstitute);
+    public function addSubstitution(User $user, string $eanCodeToReplace, array $similarProduct): void
+    {
+        $substitution = (new Substitution())
+            ->setEanCodeToReplace($eanCodeToReplace)
+            ->setEanCodeOfSubstitute($similarProduct['code'])
+            ->setBrands($similarProduct['brands'])
+            ->setCategories($similarProduct['categories_tags_fr'])
+            ->setNutriscore($similarProduct['nutriscore_score'])
+            ->setProductName($similarProduct['product_name']);
         $user->addSubstitution($substitution);
+    }
+
+    public function searchSimilarProduct(string $eanCodeToReplace): array
+    {
+        $product = $this->openFoodFactsManager->getSingleProductFromOpenFoodFactsWithEanCode($eanCodeToReplace);
+
+        $categoriesTags = $product['categories_tags_fr'];
+        $similarProduct = $this->openFoodFactsManager->getProductByCategoriesTagsSortedByNutriscore($categoriesTags);
+
+        return $similarProduct;
     }
 }
