@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\FavoriteProduct;
 use App\Entity\User;
+use App\Service\FavoriteProductManager;
+use App\Service\SearchProductManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -49,5 +51,22 @@ class FavoriteProductRepository extends ServiceEntityRepository
             ->andWhere('favoriteProduct.code = :code')
             ->setParameter('code', $code)
             ->getQuery()->getOneOrNullResult();
+    }
+
+    public function findExistingFavoriteProductOfUserWithSearch(User $user, array $searchParams): array
+    {
+        if(!isset($searchParams[SearchProductManager::CODE_SEARCH_WORD])) {
+            return [];
+        }
+
+        $code = $searchParams[SearchProductManager::CODE_SEARCH_WORD];
+
+        return $this->createQueryBuilder('favoriteProduct')
+            ->join('favoriteProduct.User', 'user')
+            ->andWhere('user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('favoriteProduct.code LIKE :code')
+            ->setParameter('code', "%$code%")
+            ->getQuery()->getResult();
     }
 }

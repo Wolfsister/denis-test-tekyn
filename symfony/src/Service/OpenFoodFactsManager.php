@@ -8,7 +8,6 @@ class OpenFoodFactsManager
     // TODO: use that to populate favorite entity
     public function getSingleProductFromOpenFoodFactsWithEanCode(string $eanCode): array
     {
-        //        $url = "https://fr.openfoodfacts.org/api/v2/search?action=process&search_terms=biscino&fields=code,product_name,nutriscore_score&sort_by=unique_scans_n&page_size=24?sort_by=nutriscore_score";
         $url = sprintf("https://fr.openfoodfacts.org/api/v2/search?action=process&code=%s&fields=code,product_name,nutriscore_score,categories_tags_fr,tags&sort_by=unique_scans_n?sort_by=nutriscore_score", $eanCode);
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -41,6 +40,33 @@ class OpenFoodFactsManager
         $response = json_decode(curl_exec($ch), true);
         curl_close($ch);
         return $response['products'][0] ?? [];
+    }
+
+    public function searchProducts(array $queryParams): array
+    {
+        $url = "https://fr.openfoodfacts.org/cgi/search.pl?action=process&json=1&page_size=20";
+
+        if (isset($queryParams[SearchProductManager::CODE_SEARCH_WORD])) {
+            $url .= sprintf("&code=%s", urlencode($queryParams[SearchProductManager::CODE_SEARCH_WORD]));
+        }
+
+        if (isset($queryParams[SearchProductManager::BRAND_SEARCH_WORD])) {
+            $url .= sprintf("&brands=%s", urlencode($queryParams[SearchProductManager::BRAND_SEARCH_WORD]));
+        }
+
+        if (isset($queryParams[SearchProductManager::NAME_SEARCH_WORD])) {
+            $url .= sprintf("&search_terms=%s", urlencode($queryParams[SearchProductManager::NAME_SEARCH_WORD]));
+        }
+
+        $url .= "&fields=code,product_name,nutriscore_score,categories_tags_fr,tags,brands,allergens,ingredients,nutrition_grade_fr&sort_by=unique_scans_n?sort_by=nutriscore_score";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+
+        return $response['products'] ?? [];
     }
 
 }

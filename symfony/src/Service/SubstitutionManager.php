@@ -31,4 +31,19 @@ class SubstitutionManager
 
         return $similarProduct;
     }
+
+    public function getSubstituteInfos(User $user, string $eanCodeToReplace): ?array {
+        foreach ($user->getSubstitutions() as $substitution) {
+            if ($substitution->getEanCodeToReplace() === $eanCodeToReplace) {
+                return [
+                    'code' => $substitution->getEanCodeOfSubstitute(),
+                    'nutriscore' => $substitution->getNutriscore(),
+                    'name' => $substitution->getProductName(),
+                    'brands' => $substitution->getBrands(),
+                    'categories' => $substitution->getCategories()
+                ];
+            }
+        }
+        return null;
+    }
 }

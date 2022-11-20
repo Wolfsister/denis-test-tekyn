@@ -37,4 +37,15 @@ class FavoriteProductManager
             $user->removeFavoriteProduct($favoriteProduct);
         }
     }
+
+    public function searchInSavedFavoriteProducts(User $user, array $searchParams): array
+    {
+        $existingFavoriteProducts = $this->favoriteProductRepository->findExistingFavoriteProductOfUserWithSearch($user, $searchParams);
+
+        $listOfEans = [];
+        foreach ($existingFavoriteProducts as $existingFavoriteProduct) {
+            $listOfEans[] = $existingFavoriteProduct['code'];
+        }
+        return $listOfEans;
+    }
 }
