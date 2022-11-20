@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "da8c7c28-98df-4f8e-8489-9f2be4a7682f",
+		"name": "Tekyn-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18743473"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/create-user?username=denis98&password=tekyn",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"create-user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "denis98"
+						},
+						{
+							"key": "password",
+							"value": "tekyn"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JWT login check",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"denis\", \"password\": \"tekyn\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/login_check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"login_check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add favorite",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/save/12288964543578888",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"save",
+						"12288964543578888"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Call direct à OpenFoodFacts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://world.openfoodfacts.org/api/v0/product/737628064502.json",
+					"protocol": "https",
+					"host": [
+						"world",
+						"openfoodfacts",
+						"org"
+					],
+					"path": [
+						"api",
+						"v0",
+						"product",
+						"737628064502.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add substitution",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/save/substitution/3274080005003?eanCodeOfSubstitute=3274080005004",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"save",
+						"substitution",
+						"3274080005003"
+					],
+					"query": [
+						{
+							"key": "eanCodeOfSubstitute",
+							"value": "3274080005004"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add exclusion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/exclude/987654321ex",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"exclude",
+						"987654321ex"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove favorite product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/delete/12288964543",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"delete",
+						"12288964543"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove all favorites",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/clear",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"clear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/api/search?name=Lasagne",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "marque",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "Lasagne"
+						},
+						{
+							"key": "ean",
+							"value": "20842499",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2Njg5NjYxODYsImV4cCI6MTY2ODk2OTc4Niwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZGVuaXMifQ.PIwd0ocpLL868YZZEzq7x9CJOHdUaOw1nCLVMJDKE2K1THM7m6hPuhbgvrRiwx5URf7r-qmCmYqf8NdHwebihVVM56SnH6qSO4j0yu_Bbk7cazfxl957woqS4ZzU6AosmXhMd8vtDk2yAEXL1JbnhZPUdr1UxODpl05DlrFNNm2CwUJ6dWi2tP2m-ynDyCWUj89nICrX5q_U5G-qiVrO7V1-wdIsh_YQMEFc6RhOPttZIrBXrJFQwzKQ103SltFIBIzkvGU0pzDXZlInu1-y4euxJ6wwu9OHeuhCVkJK6ZiAj36GHVidfoyj6KY_nrQPE6AtB6uy8w2Hr6SkpRh1VQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
